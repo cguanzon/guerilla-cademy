@@ -1,12 +1,19 @@
 'use strict';
 
-/**
- * @ngdoc overview
- * @name guerillaCademyApp
- * @description
- * # guerillaCademyApp
- *
- * Main module of the application.
- */
 angular
-  .module('guerillaCademyApp', []);
+  .module('guerillaCademyApp', []).config(function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/paths');
+
+    $stateProvider
+        .state('login', {
+            url: '/login'
+        })
+        .state('paths', {
+            url: '/paths'
+        })
+        .state('path', {
+            url: '/paths/:pathId'
+        });
+});
+
+
