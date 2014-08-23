@@ -9,7 +9,14 @@ angular
             url: '/login'
         })
         .state('paths', {
-            url: '/paths'
+            url: '/paths',
+            templateUrl: 'views/paths.html',
+            controller: 'PathsCtrl',
+            resolve: {
+               pathsRef: function(pathService){
+                return pathService.getPaths();
+               }
+            }
         })
         .state('path', {
             url: '/paths/:pathId'
