@@ -9,4 +9,13 @@ angular.module('guerillaCademyApp')
     ];
 
     $scope.paths = pathsRef.$asArray();
+
+    $scope.createPath = function(author, title, description){
+        $scope.paths.$add({
+           author: $scope.username,
+           title: title,
+           description: description || ''
+        });
+    };
+
   });

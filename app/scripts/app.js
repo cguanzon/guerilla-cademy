@@ -1,14 +1,26 @@
 'use strict';
 
 angular
-  .module('guerillaCademyApp', []).config(function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/paths');
+  .module('guerillaCademyApp', ['firebase', 'ui.router']).config(function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/login');
 
     $stateProvider
-        .state('login', {
-            url: '/login'
+        .state('secure', {
+            abstract: true,
+            controller: 'SecureCtrl',
+            template: '<div ui-view>',
+            resolve: {
+                username: function (EnvironmentService) {
+                    return EnvironmentService.getUsername();
+                }
+            }
         })
-        .state('paths', {
+        .state('login', {
+            url: '/login',
+            templateUrl: '/views/login.html',
+            controller: 'LoginCtrl'
+        })
+        .state('secure.paths', {
             url: '/paths',
             templateUrl: 'views/paths.html',
             controller: 'PathsCtrl',
@@ -18,7 +30,7 @@ angular
                }
             }
         })
-        .state('path', {
+        .state('secure.path', {
             url: '/paths/:pathId'
         });
 });

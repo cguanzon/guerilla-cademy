@@ -1,1 +1,23 @@
-<p>This is the paths view.</p>
+<div>
+    <p>Paths</p>
+
+    <form name="newPathForm" ng-submit="createPath(username, newTitle, newDescription)">
+        <input type="text" ng-model="newTitle" placeholder="Title" required/>
+        <input type="text" ng-model="newDescription" placeholder="Description"/>
+        <button ng-disabled="newPathForm.$invalid">Create Path</button>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-md-4" ng-repeat="path in paths">
+        <div class="thumbnail">
+            <img ng-src="{{path.picUrl}}" alt="image of {{path.title}}">
+            <div class="caption">
+                <h3>{{path.title}}</h3>
+                <p>{{path.description}}</p>
+                <p>by {{path.author}}</p>
+                <p><a ui-sref="secure.path({pathId: path.$id})" class="btn btn-primary" role="button">Visit</a></p>
+            </div>
+        </div>
+    </div>
+</div>
