@@ -11,8 +11,7 @@ angular.module('guerillaCademyApp')
     $scope.env = EnvironmentService.getEnv();
 
     $scope.logMeIn = function(){
-        console.log($scope.username);
         EnvironmentService.saveUsername($scope.username);
-        $state.go('secure.paths');
+        $state.go('dashboard');
     };
   });

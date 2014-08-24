@@ -20,6 +20,13 @@ angular
             templateUrl: '/views/login.html',
             controller: 'LoginCtrl'
         })
+
+        .state('dashboard', {
+            url:'/dashboard',
+            templateUrl: 'views/dashboard.html',
+            controller: 'UserCtrl'
+        })
+
         .state('secure.paths', {
             url: '/paths',
             templateUrl: 'views/paths.html',
