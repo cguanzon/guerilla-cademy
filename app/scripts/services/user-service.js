@@ -1,102 +1,59 @@
 'use strict';
 
 angular.module('guerillaCademyApp')
-    .service('UserService', function UserService($q, $firebase, $firebaseSimpleLogin, EnvironmentService, Restangular) {
-        var firebaseEndpoint = EnvironmentService.getEnv().firebase,
-            firebase = new Firebase(firebaseEndpoint),
-            firebaseSimpleLogin = $firebaseSimpleLogin(firebase),
-            getUser = function (userId) {
-                var userObject,
-                    promise;
+    .service('UserService', function UserService($q, $firebase, $firebaseSimpleLogin, EnvironmentService) {
+        var firebaseUrl = EnvironmentService.getEnv().firebase,
+            firebase = new Firebase(firebaseUrl),
+            firebaseSimpleLogin = $firebaseSimpleLogin(firebase);
 
-                if (userId) {
-                    userObject = $firebase(new Firebase(firebaseEndpoint + '/users/' + userId)).$asObject();
-
-                    /*
-                     * Protect against the case where a user is logged in yet has deleted her email address.
-                     * This function effectively resets the user's email to the email that she used to register if the user or
-                     * her email were somehow deleted.
-                     *
-                     * We may want this reset function to be a bit more elaborate in the future if we determine that more user
-                     * attributes are essential to the application and should at least receive defaults.
-                     */
-                    userObject.$loaded().then(function (user) {
-                        if (!user || !user.email) {
-                            firebaseSimpleLogin.$getCurrentUser().then(function (currentUser) {
-                                userObject.email = currentUser.email;
-                                userObject.$save();
-                            });
-                        }
-                    });
-
-                } else {
-                    promise = firebaseSimpleLogin.$getCurrentUser();
-
-                    promise.then(function (currentUser) {
-                        if (currentUser) {
-                            Restangular.setDefaultHeaders({'Authorization': currentUser.firebaseAuthToken});
-                        }
-                    });
-
-                }
-
-                return userObject || promise;
-
-            },
-            getResolvedPromise = function (resolution) {
-                var deferred = $q.defer();
-                deferred.resolve(resolution);
-                return deferred.promise;
+            this.getCurrentUser = function () {
+                return firebaseSimpleLogin.$getCurrentUser();
             };
 
+            this.register = function (username, email, password) {
+                var firebasePromise = firebaseSimpleLogin.$createUser(email, password),
+                    userDeferred = $q.defer(),
+                    combinedPromise = $q.all(firebasePromise, userDeferred.promise);
 
-        return {
-            getUser: getUser,
+                // After the Firebase user has been created, create our own user object
+                firebasePromise.then(function (currentUser) {
+                    var userObject = $firebase(new Firebase(firebaseUrl + '/users/' + currentUser.id)).$asObject();
 
-            logIn: function (email, password) {
+                    userObject.username = username;
+                    userObject.email = currentUser.email;
+                    userObject.$save().then(userDeferred.resolve, userDeferred.reject);
+                });
+
+                return combinedPromise;
+            };
+
+            this.logIn = function (email, password) {
                 return firebaseSimpleLogin.$login('password', {
                     email: email,
                     password: password,
-                    rememberMe: true // Override default session length (browser session) to be 30 days.
+                    rememberMe: true // Override default session length (browser session) to be 30 days
                 });
-            },
+            };
 
-            register: function (email, password) {
+            this.logOut = function () {
                 var deferred = $q.defer();
 
-                firebaseSimpleLogin.$createUser(email, password).then(function (user) {
-                    // Create our own custom user object to house the user's data
-                    var userObject = $firebase(new Firebase(firebaseEndpoint + '/users/' + user.id)).$asObject();
-                    userObject.email = user.email;
-                    userObject.$save().then(deferred.resolve, deferred.reject);
-
-                }, deferred.reject);
+                deferred.resolve(firebaseSimpleLogin.$logout());
 
                 return deferred.promise;
-            },
+            };
 
-            logOut: function () {
-                return getResolvedPromise(firebaseSimpleLogin.$logout());
-            },
-
-            resetPassword: function (email) {
+            this.getUser = function () {
                 var deferred = $q.defer();
 
-                // firebaseSimpleLogin.$resetPassword has not yet been implemented in angularfire. We're going it alone.
-                var auth = new FirebaseSimpleLogin(firebase, function (err, user) {
-                    console.log('err, user', err, user);
-                });
-                auth.sendPasswordResetEmail(email, function (err, success) {
-                    if (err) {
-                        deferred.reject(err);
+                firebaseSimpleLogin.$getCurrentUser().then(function (currentUser) {
+                    if (currentUser && currentUser.id) {
+                        var userRef = $firebase(new Firebase(firebaseUrl + '/users/' + currentUser.id));
+                        deferred.resolve(userRef.$asObject());
                     } else {
-                        deferred.resolve(success);
+                        deferred.reject();
                     }
                 });
-
                 return deferred.promise;
-            },
-
-            changePassword: firebaseSimpleLogin.$changePassword
-        };
+            };
     });

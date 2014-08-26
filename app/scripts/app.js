@@ -7,11 +7,14 @@ angular
     $stateProvider
         .state('secure', {
             abstract: true,
+            template: '<a ng-click="logOut()">Log Out</a><div ui-view>',
             controller: 'SecureCtrl',
-            template: '<div ui-view>',
             resolve: {
-                username: function (EnvironmentService) {
-                    return EnvironmentService.getUsername();
+                currentUser: function (UserService) {
+                    return UserService.getCurrentUser();
+                },
+                user: function (UserService) {
+                    return UserService.getUser();
                 }
             }
         })

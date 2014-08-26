@@ -1,19 +1,30 @@
 'use strict';
 
 angular.module('guerillaCademyApp')
-  .controller('LoginCtrl', function ($state, $scope, EnvironmentService, UserService) {
+  .controller('LoginCtrl', function ($state, $scope, UserService) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
       'Karma'
     ];
 
-    $scope.env = EnvironmentService.getEnv();
+    $scope.logMeIn = function (email, password) {
+        UserService.logIn(email, password).then(function (user) {
+            $state.go('secure.paths');
+        }, function (error) {
+            alert(error);
+        });
 
-    $scope.logMeIn = function(){
-//        EnvironmentService.saveUsername($scope.username);
+    };
 
+    $scope.register = function (username, email, password) {
+        UserService.register(username, email, password).then(function (user) {
+            UserService.logIn(email, password).then(function () {
+                $state.go('secure.paths');
+            });
 
-        $state.go('secure.paths');
+        }, function (error) {
+            alert(error);
+        });
     };
   });
