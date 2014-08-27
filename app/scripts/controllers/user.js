@@ -15,6 +15,4 @@ angular.module('guerillaCademyApp')
       'Karma'
     ];
 
-
-
   });

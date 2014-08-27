@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('guerillaCademyApp')
-  .controller('PathsCtrl', function ($scope, pathsRef, user) {
+  .controller('PathsCtrl', function ($scope, pathsRef) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -17,8 +17,4 @@ angular.module('guerillaCademyApp')
            description: description || ''
         });
     };
-
-    $scope.user = user;
-    console.log($scope.user);
-    console.log($scope.user.username);
   });
