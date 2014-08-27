@@ -14,7 +14,6 @@ angular.module('guerillaCademyApp')
         }, function (error) {
             alert(error);
         });
-
     };
 
     $scope.register = function (username, email, password) {

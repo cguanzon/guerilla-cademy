@@ -7,7 +7,7 @@ angular
     $stateProvider
         .state('secure', {
             abstract: true,
-            template: '<a ng-click="logOut()">Log Out</a><div ui-view>',
+            template: '<a ng-click="logOut()">Log Out</a><span> {{user.username}}</span><div ui-view>',
             controller: 'SecureCtrl',
             resolve: {
                 currentUser: function (UserService) {
@@ -26,7 +26,7 @@ angular
 
         .state('dashboard', {
             url:'/dashboard',
-            templateUrl: 'views/dashboard.html',
+            templateUrl: '../views/user.html',
             controller: 'UserCtrl'
         })
 
@@ -42,6 +42,11 @@ angular
         })
         .state('secure.path', {
             url: '/paths/:pathId'
+        })
+        .state('secure.user', {
+            url: '/users/:userId',
+            templateUrl: 'views/user.html',
+            controller: 'UserCtrl'
         });
 });
 

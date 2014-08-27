@@ -49,7 +49,9 @@ angular.module('guerillaCademyApp')
                 firebaseSimpleLogin.$getCurrentUser().then(function (currentUser) {
                     if (currentUser && currentUser.id) {
                         var userRef = $firebase(new Firebase(firebaseUrl + '/users/' + currentUser.id));
-                        deferred.resolve(userRef.$asObject());
+                        deferred.resolve(userRef.$asObject().$loaded().then(function(res){
+                            return res;
+                        }));
                     } else {
                         deferred.reject();
                     }

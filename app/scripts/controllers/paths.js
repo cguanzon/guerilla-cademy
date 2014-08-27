@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('guerillaCademyApp')
-  .controller('PathsCtrl', function ($scope, pathsRef) {
+  .controller('PathsCtrl', function ($scope, pathsRef, user) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -12,10 +12,13 @@ angular.module('guerillaCademyApp')
 
     $scope.createPath = function(author, title, description){
         $scope.paths.$add({
-           author: $scope.username,
+           author: $scope.user.username,
            title: title,
            description: description || ''
         });
     };
 
+    $scope.user = user;
+    console.log($scope.user);
+    console.log($scope.user.username);
   });
