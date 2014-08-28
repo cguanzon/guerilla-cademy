@@ -10,7 +10,7 @@ angular.module('guerillaCademyApp')
 
     $scope.logMeIn = function (email, password) {
         UserService.logIn(email, password).then(function () {
-            $state.go('secure.user', {'userId':UserService.getUser().$id});
+            $state.go('secure.dashboard');
         }, function (error) {
             alert(error);
         });
@@ -19,7 +19,7 @@ angular.module('guerillaCademyApp')
     $scope.register = function (username, email, password) {
         UserService.register(username, email, password).then(function () {
             UserService.logIn(email, password).then(function () {
-                $state.go('secure.user', {'userId':UserService.getUser().$id});
+                $state.go('secure.dashboard');
             });
 
         }, function (error) {

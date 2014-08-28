@@ -1,0 +1,56 @@
+<div class="container-fluid">
+
+
+
+
+    <div class="row">
+        <div class="col-md-4">
+            <img ng-src="{{user.picUrl}}" alt="image of user"/>
+            <h1>{{user.username}}</h1>
+            <p>{{user.email}}</p>
+            <p>{{user.description}}</p>
+        </div>
+        <div class="col-md-8">
+            <div class="well well-sm">
+                <form class="form-horizontal" ng-submit="updateUser()">
+                    <fieldset>
+                        <legend class="text-center">Update your info</legend>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Username</label>
+                            <div class="col-md-9">
+                                <input id="username" type="text" ng-model="user.username" value="{{user.username}}" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Your Description</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" id="description" ng-model="user.description" value="{{user.description}}" rows="5"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Profile Pic URL</label>
+                            <div class="col-md-9">
+                                <input id="picUrl" type="url" ng-model="user.picUrl" value="{{user.picUrl}}" class="form-control">
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div class="form-group">
+                            <div class="col-md-12 text-right">
+                                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -5,13 +5,13 @@ describe('Controller: UserCtrl', function () {
   // load the controller's module
   beforeEach(module('guerillaCademyApp'));
 
-  var UserCtrl,
+  var DashboardCtrl,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    UserCtrl = $controller('UserCtrl', {
+    DashboardCtrl = $controller('DashboardCtrl', {
       $scope: scope
     });
   }));

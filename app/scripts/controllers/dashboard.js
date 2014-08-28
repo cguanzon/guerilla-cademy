@@ -8,11 +8,15 @@
  * Controller of the guerillaCademyApp
  */
 angular.module('guerillaCademyApp')
-  .controller('UserCtrl', function ($scope) {
+  .controller('DashboardCtrl', function ($scope) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
       'Karma'
     ];
+
+    $scope.updateUser = function(){
+        $scope.user.$save();
+    };
 
   });

@@ -24,12 +24,6 @@ angular
             controller: 'LoginCtrl'
         })
 
-        .state('dashboard', {
-            url:'/dashboard',
-            templateUrl: '../views/user.html',
-            controller: 'UserCtrl'
-        })
-
         .state('secure.paths', {
             url: '/paths',
             templateUrl: 'views/paths.html',
@@ -43,10 +37,10 @@ angular
         .state('secure.path', {
             url: '/paths/:pathId'
         })
-        .state('secure.user', {
-            url: '/users/:userId',
-            templateUrl: 'views/user.html',
-            controller: 'UserCtrl'
+        .state('secure.dashboard', {
+            url: '/dashboard',
+            templateUrl: '../views/dashboard.html',
+            controller: 'DashboardCtrl'
         });
 });
 
